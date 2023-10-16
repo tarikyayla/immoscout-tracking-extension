@@ -1,0 +1,124 @@
+/* Reset some default styles */
+body,
+h1,
+p,
+ul {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f0f0f0;
+  width: 300px; /* Set the width to match your extension's popup size */
+  padding: 20px;
+}
+
+h1 {
+  font-size: 20px;
+  margin-bottom: 20px;
+}
+
+.ad-list {
+  background-color: #fff;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  padding: 10px;
+}
+
+.ad-list .ad-item {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  border-bottom: 1px solid #ccc;
+}
+
+.ad-list .ad-item:last-child {
+  border-bottom: none;
+}
+
+.ad-list svg {
+  height: 1em;
+  margin-right: 10px;
+  fill: #007bff;
+}
+
+.advert-title {
+  flex: 1;
+}
+
+.delete-button {
+  background-color: #ff6666;
+  color: #fff;
+  border: none;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  margin-left: 10px;
+}
+
+.delete-button:hover {
+  background-color: #e60000;
+}
+
+.button {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 3px;
+  font-size: 16px;
+  cursor: pointer;
+  width: 100%;
+}
+
+.button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.ad-item-details {
+  font-family: Arial, sans-serif;
+  background-color: #fff;
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  margin: 10px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.ad-item-details a {
+  text-decoration: none;
+  color: #007bff;
+  font-weight: bold;
+  margin-right: 10px;
+}
+
+.ad-item-details .label {
+  font-weight: bold;
+  margin-right: 5px;
+}
+
+.ad-item-details span {
+  margin-right: 10px;
+}
+
+.ad-item-pictures {
+  display: grid;
+  justify-content: center;
+  grid-template-columns: repeat(2, minmax(100px, 150px));
+  grid-gap: 5px;
+}
+
+.ad-item-pictures a img {
+  width: 100%; /* Ensures the image takes the full width of its grid cell */
+  height: 100%; /* Ensures the image takes the full height of its grid cell */
+  object-fit: cover; /* Adjusts how the image is displayed to cover the entire cell */
+}
