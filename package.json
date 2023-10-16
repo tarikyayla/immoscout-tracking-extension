@@ -6,12 +6,38 @@
     "build:watch": "bun build --minify --outdir=public/scripts ./src/*.ts* --watch",
     "prebuild": "bun run format && bun run lint",
     "lint": "eslint --ext .ts,.tsx ./src --cache --cache-file node_modules/.cache/.eslintcache",
-    "format": "prettier -w ."
+    "format": "prettier -w .",
+    "preformat": "bun run lint",
+    "prepare": "husky install",
+    "release": "standard-version"
   },
   "engines": {
     "node": "^18.0.0"
   },
+  "lint-staged": {
+    "./**/*.{ts,tsx,css,html}": [
+      "eslint --fix",
+      "prettier --write"
+    ]
+  },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ],
+    "rules": {
+      "subject-case": [
+        2,
+        "never",
+        [
+          "start-case",
+          "pascal-case"
+        ]
+      ]
+    }
+  },
   "devDependencies": {
+    "@commitlint/cli": "^17.8.0",
+    "@commitlint/config-conventional": "^17.8.0",
     "@types/file-saver": "^2.0.5",
     "@types/html2canvas": "^1.0.0",
     "@typescript-eslint/eslint-plugin": "^6.7.5",
@@ -27,15 +53,19 @@
     "eslint-plugin-prettier": "^5.0.1",
     "eslint-plugin-promise": "^6.1.1",
     "prettier": "^3.0.3",
+    "simple-git-hooks": "^2.9.0",
     "typescript": "^5.2.2"
   },
   "peerDependencies": {
     "typescript": "^5.0.0"
   },
   "dependencies": {
+    "classnames": "^2.3.2",
     "file-saver": "^2.0.5",
     "html2canvas": "^1.4.1",
+    "husky": "^8.0.3",
     "jszip": "^3.10.1",
-    "preact": "^10.18.1"
+    "preact": "^10.18.1",
+    "standard-version": "^9.5.0"
   }
 }
