@@ -1,7 +1,8 @@
 import { type FunctionalComponent } from "preact";
-import { useCallback, useContext, useMemo } from "preact/hooks";
+import { useCallback, useContext, useMemo, useState } from "preact/hooks";
 import { isImmobilienscout } from "../shared";
 import { MainContext } from "../context";
+import { Button } from "./Button";
 
 export const AddButton: FunctionalComponent = () => {
   const {
@@ -11,6 +12,9 @@ export const AddButton: FunctionalComponent = () => {
     addNew,
     deleteFrom
   } = useContext(MainContext);
+
+  const [isLoading, setIsLoading] = useState(false);
+
   const isImmoUrl = useMemo(() => isImmobilienscout(url), [url]);
 
   const isExists = useMemo(
@@ -19,17 +23,22 @@ export const AddButton: FunctionalComponent = () => {
   );
 
   const onClick = useCallback(() => {
-    if (isExists) {
-      deleteFrom();
-      return;
-    }
+    const action = isExists ? deleteFrom : addNew;
 
-    addNew();
+    setIsLoading(true);
+
+    action()
+      .then(() => {
+        setIsLoading(false);
+      })
+      .catch(() => {
+        setIsLoading(false);
+      });
   }, [isExists]);
 
   return (
-    <button disabled={!isImmoUrl} className="button" onClick={onClick}>
+    <Button isLoading={isLoading} isDisabled={!isImmoUrl} onClick={onClick}>
       {isExists ? "Delete" : "Add"}
-    </button>
+    </Button>
   );
 };

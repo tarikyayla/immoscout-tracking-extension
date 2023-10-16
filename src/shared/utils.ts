@@ -103,3 +103,6 @@ export const testData: ImmoAdvertsLocalStorageType = [
 ];
 
 export const noop = (): void => {};
+export const asyncNoop = async (): Promise<void> => {
+  await Promise.resolve();
+};

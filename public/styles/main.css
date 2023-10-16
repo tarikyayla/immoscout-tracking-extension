@@ -122,3 +122,41 @@ h1 {
   height: 100%; /* Ensures the image takes the full height of its grid cell */
   object-fit: cover; /* Adjusts how the image is displayed to cover the entire cell */
 }
+
+.loading-button {
+  height: 38px;
+  position: relative;
+  background-color: #0074d9;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.loading-button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.loading-button:after {
+  content: "";
+  width: 16px;
+  height: 16px;
+  border: 3px solid #ffffff;
+  border-top: 3px solid transparent;
+  border-radius: 50%;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+  100% {
+    transform: translate(-50%, -50%) rotate(360deg);
+  }
+}

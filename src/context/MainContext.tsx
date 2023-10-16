@@ -1,5 +1,5 @@
 import { type FunctionalComponent, createContext } from "preact";
-import { type IStorage, getAdId, noop } from "../shared";
+import { type IStorage, getAdId, noop, asyncNoop } from "../shared";
 import { storage } from "../shared";
 import {
   type ImmoAdvertLocalStorageItemType,
@@ -22,15 +22,15 @@ interface IMainContext {
   url: string;
   adverts: UseStateType<ImmoAdvertsLocalStorageType>;
   selectedAd: UseStateType<string | undefined>;
-  addNew: () => void;
-  deleteFrom: (id?: string) => void;
+  addNew: () => Promise<void>;
+  deleteFrom: (id?: string) => Promise<void>;
   id: string;
 }
 
 const defaultMainContext: IMainContext = {
-  addNew: noop,
+  addNew: asyncNoop,
   adverts: [[], noop],
-  deleteFrom: noop,
+  deleteFrom: asyncNoop,
   id: "",
   selectedAd: [undefined, noop],
   storage,
@@ -93,7 +93,7 @@ export const MainContextProvider: FunctionalComponent = ({ children }) => {
   }, [storage]);
 
   const deleteFrom = useCallback(
-    (innerId?: string) => {
+    async (innerId?: string) => {
       if (confirm("Silmek istedigine emin misin?")) {
         const deleteId = innerId ?? id;
         storage
