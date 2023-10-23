@@ -1,10 +1,10 @@
 import { StorageKeys } from "./constants";
-
-interface WithId {
-  id: string;
-}
-
-type StorageKeyType = keyof typeof StorageKeys;
+import {
+  type WithId,
+  type ImmoAdvertsLocalStorageType,
+  type IChromeExtensionApi
+} from "./types";
+import { type StorageKeyType } from "./utils";
 
 export interface IApi {
   get: <T>(key: StorageKeyType, fallbackValue?: any) => Promise<T>;
@@ -40,6 +40,7 @@ export const LocalStorageApi: IApi = {
 };
 
 export interface IStorage {
+  api: IApi;
   append: (key: StorageKeyType, item: any) => Promise<any[]>;
   insert: (key: StorageKeyType, item: any) => Promise<void>;
   deleteFrom: <T extends WithId>(
@@ -50,8 +51,12 @@ export interface IStorage {
 
 export class Storage implements IStorage {
   api: IApi;
-  constructor(api: IApi) {
+  constructor(api: IApi, initData?: ImmoAdvertsLocalStorageType) {
     this.api = api;
+
+    if (initData !== undefined) {
+      api.set("IMMO_ADS", initData);
+    }
   }
 
   async append<T extends any[]>(key: StorageKeyType, item: any): Promise<T> {
@@ -75,4 +80,26 @@ export class Storage implements IStorage {
   }
 }
 
-export const storage = new Storage(StorageApi);
+export const chromeExtensionApi: IChromeExtensionApi = {
+  async getActiveTab() {
+    const [tab] = await chrome.tabs.query({
+      active: true,
+      lastFocusedWindow: true
+    });
+
+    return tab;
+  },
+  async sendMessage(message, tab) {
+    if (tab === undefined) {
+      tab = await this.getActiveTab();
+    }
+
+    if (tab === undefined) {
+      throw new Error("Active tab returns undefined");
+    }
+
+    const response = await chrome.tabs.sendMessage(tab.id!, message);
+
+    return response;
+  }
+};

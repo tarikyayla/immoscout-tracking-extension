@@ -17,7 +17,9 @@
     "jsxImportSource": "preact",
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
-    "allowJs": true
+    "resolveJsonModule": true,
+    "allowJs": true,
+    "esModuleInterop": true
   },
-  "include": ["src/**/*", "types/**/*"]
+  "include": ["src/**/*", "src/**/*.json"]
 }

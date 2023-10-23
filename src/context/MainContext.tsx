@@ -1,6 +1,10 @@
 import { type FunctionalComponent, createContext } from "preact";
-import { type IStorage, getAdId, noop, asyncNoop } from "../shared";
-import { storage } from "../shared";
+import {
+  type IStorage,
+  getAdId,
+  type IChromeExtensionApi,
+  chromeExtensionApi
+} from "../shared";
 import {
   type ImmoAdvertLocalStorageItemType,
   type ImmoAdvertsLocalStorageType
@@ -13,6 +17,7 @@ import {
   useState
 } from "preact/hooks";
 import { EVENT_TYPES } from "../shared/constants";
+import { asyncNoop, mockedStorage, noop } from "../shared/mocks";
 
 type UseStateType<T> = [T, StateUpdater<T>];
 
@@ -33,13 +38,20 @@ const defaultMainContext: IMainContext = {
   deleteFrom: asyncNoop,
   id: "",
   selectedAd: [undefined, noop],
-  storage,
+  storage: mockedStorage,
   url: "",
   tab: undefined
 };
 export const MainContext = createContext<IMainContext>(defaultMainContext);
 
-export const MainContextProvider: FunctionalComponent = ({ children }) => {
+export interface MainContextProviderProps {
+  storage: IStorage;
+  extensionApi: IChromeExtensionApi;
+}
+
+export const MainContextProvider: FunctionalComponent<
+  MainContextProviderProps
+> = ({ children, storage, extensionApi }) => {
   const [ads, setAds] = useState<ImmoAdvertsLocalStorageType>([]);
   const [selectedAd, setSelectedAd] = useState<string>();
   const [url, setUrl] = useState<string>("");
@@ -47,14 +59,11 @@ export const MainContextProvider: FunctionalComponent = ({ children }) => {
   const id = useMemo(() => getAdId(url), [url]);
 
   useEffect(() => {
-    chrome.tabs
-      .query({
-        active: true,
-        lastFocusedWindow: true
-      })
-      .then((tabs) => {
-        if (tabs?.[0].url !== undefined) {
-          setUrl(tabs[0].url);
+    extensionApi
+      .getActiveTab()
+      .then((tab) => {
+        if (tab?.url !== undefined) {
+          setUrl(tab.url);
         }
       })
       .catch((err) => {
@@ -76,20 +85,14 @@ export const MainContextProvider: FunctionalComponent = ({ children }) => {
   }, [id]);
 
   const addNew = useCallback(async () => {
-    const [tab] = await chrome.tabs.query({
-      active: true,
-      lastFocusedWindow: true
-    });
-
-    if (tab?.id === undefined) return;
-
-    const item = await chrome.tabs.sendMessage(tab.id, {
+    const item = await chromeExtensionApi.sendMessage({
       type: EVENT_TYPES.FETCH_AD
     });
 
-    storage.append("IMMO_ADS", item).then((item) => {
-      setAds(item);
-    });
+    if (item !== undefined)
+      storage.append("IMMO_ADS", item).then((item) => {
+        setAds(item);
+      });
   }, [storage]);
 
   const deleteFrom = useCallback(

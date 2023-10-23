@@ -9,6 +9,7 @@
     "lint": "eslint --ext .ts,.tsx ./src --cache --cache-file node_modules/.cache/.eslintcache",
     "format": "prettier -w .",
     "preformat": "bun run lint",
+    "serve": "live-server public --entry-file=popup.html --port=5000",
     "prepare": "husky install",
     "release": "standard-version"
   },
@@ -53,6 +54,7 @@
     "eslint-plugin-n": "^16.1.0",
     "eslint-plugin-prettier": "^5.0.1",
     "eslint-plugin-promise": "^6.1.1",
+    "live-server": "git+https://github.com/tapio/live-server.git#ad22544",
     "prettier": "^3.0.3",
     "simple-git-hooks": "^2.9.0",
     "typescript": "^5.2.2"
