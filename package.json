@@ -1,7 +1,7 @@
 {
   "name": "immo-tracking-extension",
   "main": "./src/index.ts",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "scripts": {
     "build": "bun build --minify --outdir=public/scripts ./src/*.ts*",
     "build:watch": "bun build --minify --outdir=public/scripts ./src/*.ts* --watch",
