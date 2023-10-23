@@ -41,10 +41,7 @@ export const Pictures: FunctionalComponent<{
           .filter((picture) => picture != null)
           .map((picture) => (
             <a href={picture!} target={"_blank"}>
-              <img
-                onClick={() => window.open(picture!, "_blank")}
-                src={picture as string}
-              />
+              <img src={picture as string} />
             </a>
           ))}
       </div>
